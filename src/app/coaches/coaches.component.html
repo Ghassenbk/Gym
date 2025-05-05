@@ -1,0 +1,48 @@
+<div class="image">
+<app-header></app-header>
+<section class="cc">
+    <br>
+    <div class="programs-section">
+      <div class="programs-grid">
+        <div class="coach-card" *ngFor="let coach of coaches" [ngStyle]="{'height': coach.showComments ? 'auto' : '440px'}">
+          
+          <!-- Coach Content Section Inside Coach Card -->
+          <div class="coach-content">
+            <div class="coach-image">
+              <img [src]="coach.imageUrl" alt="Coach image">
+            </div>
+            <br>
+            <p><strong>Name:</strong> {{ coach.name }}</p>
+            <p><strong>Speciality:</strong> {{ coach.speciality }}</p>
+            <button class="message-btn">Message</button>
+    
+            <div class="dropdown-toggle" (click)="toggleComments(coach)">
+                 <!-- Or another icon for dropdown -->
+            </div>
+          </div>
+          
+          <!-- Comments Section -->
+          <div class="comments-dropdown" *ngIf="coach.showComments">
+            <div class="comment-card" *ngFor="let comment of coach.comments">
+              <p><strong>Recommends:</strong> {{ comment.text }}</p>
+              <p><strong>Rating:</strong> {{ '⭐'.repeat(comment.rating) }}</p>
+            </div>
+          </div>
+          <div class="add-comment" *ngIf="coach.showComments"> 
+            <textarea placeholder="Add a Review" rows="3"></textarea>
+            <div class="rating">
+                <span
+                  *ngFor="let star of [1, 2, 3, 4, 5]"
+                  class="star"
+                  [class.selected]="star <= coach.selectedRating"
+                  (click)="selectRating(coach, star)">
+                  &#9734;
+                </span>
+              </div>
+            <button class="add-comment-btn">Add</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

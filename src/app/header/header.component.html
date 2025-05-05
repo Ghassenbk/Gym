@@ -1,0 +1,103 @@
+<!-- Navigation bar -->
+<header>
+  <div class="logo">MUSCLE<span>ORA</span></div>
+  <nav>
+    <a [routerLink]="['/']">HOME</a>
+    <!--<a [routerLink]="['/about']">ABOUT</a>-->
+    <a [routerLink]="['/program-details']">PROGRAMS</a>
+    <a [routerLink]="['/coaches']">COACHES</a>
+    <a [routerLink]="['/contact']">CONTACT</a>
+    <a [routerLink]="['/coachprofile']">Profil Coach Temp</a>
+    <a [routerLink]="['/adminDashBoard']" *ngIf="isLoggedIn && user?.role === 'ADMIN'">Admin</a>
+    <button *ngIf="!isLoggedIn" class="signup-btn" data-bs-toggle="modal" data-bs-target="#registerModal">SIGN UP</button>
+    <button *ngIf="!isLoggedIn" class="signup-btn" data-bs-toggle="modal" data-bs-target="#loginModal">LOGIN</button>
+    <button *ngIf="isLoggedIn" class="signup-btn" (click)="logout()">LOGOUT</button>
+  </nav>
+</header>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form (ngSubmit)="onLoginSubmit($event)" style="color: black;" novalidate>
+        <div class="modal-header">
+          <h5 class="modal-title d-flex align-items-center" id="loginModalLabel">
+            <i class="bi bi-person-circle fs-3 me-2"></i>Login
+          </h5>
+          <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" (click)="resetLoginForm()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+          <!-- Email Input -->
+          <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <input type="email"
+                  [(ngModel)]="loginData.email"
+                  name="email"
+                  class="form-control shadow-none"
+                  required>
+          </div>
+          <!-- Password Input -->
+          <div class="mb-4">
+            <label class="form-label">Password</label>
+            <input type="password" [(ngModel)]="loginData.password" name="password" class="form-control shadow-none" required>
+          </div>
+          <!-- Submit Button & Forgot Password -->
+          <div class="d-flex align-items-center justify-content-between">
+            <button type="submit" class="btn btn-dark shadow-none login-btn">LOGIN</button>
+            <a href="#" class="text-secondary text-decoration-none">Forgot Password?</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form (ngSubmit)="onRegisterSubmit($event)" style="color: black;" novalidate>
+        <div class="modal-header">
+          <h5 class="modal-title d-flex align-items-center" id="registerModalLabel">
+            <i class="bi bi-person-lines-fill fs-3 me-2"></i>SIGN UP
+          </h5>
+          <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" (click)="resetRegisterForm()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap lh-base">
+            Note: Please fill out this form carefully, as the information provided is very important.
+          </span>
+          <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+          <div class="container-fluid">
+            <div class="row">
+              <!-- Name -->
+              <div class="col-md-6 ps-0 mb-3">
+                <label class="form-label">Name</label>
+                <input [(ngModel)]="registerData.name" name="name" type="text" class="form-control shadow-none" required>
+              </div>
+              <!-- Email -->
+              <div class="col-md-6 p-0 mb-3">
+                <label class="form-label">Email Address</label>
+                <input [(ngModel)]="registerData.email" name="email" type="email" class="form-control shadow-none" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" required>
+              </div>
+              <!-- Password -->
+              <div class="col-md-6 ps-0 mb-3">
+                <label class="form-label">Password</label>
+                <input [(ngModel)]="registerData.password" name="password" type="password" class="form-control shadow-none" required>
+              </div>
+              <!-- Confirm Password -->
+              <div class="col-md-6 p-0 mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input [(ngModel)]="registerData.confirmPassword" name="confirmPassword" type="password" class="form-control shadow-none" required>
+              </div>
+            </div>
+          </div>
+          <div class="text-center my-1">
+            <button type="submit" class="btn btn-dark shadow-none signup-btn">SIGN UP</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

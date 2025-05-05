@@ -1,0 +1,17 @@
+<div class="trainers-grid">
+    <div class="trainer-card" *ngFor="let trainer of trainers">
+      <img [src]="trainer.photo" alt="{{ trainer.name }}" class="trainer-photo" />
+      <div class="trainer-info">
+        <h3>{{ trainer.name }}</h3>
+        <p>{{ trainer.specialty }}</p>
+  
+        <div class="rating">
+            <ng-container *ngFor="let star of getStars(); let i = index">
+              <span [class.filled]="i < trainer.rating">★</span>
+            </ng-container>
+          </div>
+          
+      </div>
+    </div>
+  </div>
+  

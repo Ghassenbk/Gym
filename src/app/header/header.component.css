@@ -1,0 +1,32 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+  }
+
+  header .logo {
+    font-size: 35px;
+  }
+
+  header .logo span {
+    color: #FF5722;
+  }
+
+  nav a {
+    margin: 0 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .signup-btn {
+    background-color: #FF5722;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+  }

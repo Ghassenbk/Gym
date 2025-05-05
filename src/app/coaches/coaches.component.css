@@ -1,0 +1,129 @@
+
+  .cc {
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+    height: 100vh;
+  }
+  
+  .image::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url(/contact.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.4); /* Dark overlay */
+    background-blend-mode: darken; /* Makes it darker */
+    z-index: -1;
+  }
+  
+  
+  .programs-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .coach-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 300px;
+    position: relative;
+    text-align: left;
+    transition: height 0.3s ease-in-out; /* Smooth transition for height change */
+    height: auto; /* Allow card to grow based on content */
+  }
+  
+  .coach-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  
+  .coach-content {
+    padding: 15px 0;
+  }
+  
+
+  
+  .star {
+    font-size: 22px;
+    cursor: pointer;
+    color: #ccc;
+  }
+  
+  .star.selected {
+    color: #ff5722;
+  }
+  
+  .message-btn {
+    background-color: #ff5722;
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .dropdown-toggle {
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  /* Updated Comments Section with Scroll */
+  .comments-dropdown {
+    margin-top: 10px;
+    background: #dedbdb;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    max-height: 140px; /* Limit height of comment section */
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+  
+  /* Comment Card Styling */
+  .comment-card {
+    background: white;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+  }
+  
+  /* Static Comment Input Field */
+  .add-comment {
+    margin-top: 10px;
+  }
+  
+  textarea {
+    width: 100%;
+    
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+  }
+  
+  .add-comment-btn {
+    background-color: #ff5722;
+    color: white;
+    
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+  

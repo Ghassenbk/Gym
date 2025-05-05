@@ -1,0 +1,61 @@
+
+
+<div class="image">
+  <app-header></app-header>
+<section class="programs-section">
+  <br><br>
+  <h2><span class="highlight">CHOOSE</span> PROGRAM</h2>
+  <p class="subtitle">Select Your Program and Begin Your Transformation Today.</p>
+  <!-- PROCEED TO PAYMENT BUTTON -->
+  <div class="payment-button-wrapper" *ngIf="selectedProgramIds.length > 0">
+    <button class="btn btn-primary" (click)="proceedToPayment()">Proceed to Payment</button>
+  </div>
+  <div class="programs-grid">
+    <ng-container *ngFor="let program of programs">
+      <!-- PROGRAM CARD -->
+      <div class="card program-card" [ngClass]="{'selected': selectedProgramIds.includes(program.id)}" (click)="toggleProgramSelection(program.id)">
+        <div class="card-header d-flex">
+          <div class="icon-container">
+            <img [src]="program.icon" alt="{{ program.title }} icon">
+          </div>
+          <div class="program-info">
+            <h5 class="card-title">{{ program.title }}</h5>
+            <p class="card-text">{{ program.description }}</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <button (click)="toggleCalendar(program.id); $event.stopPropagation();" class="btn btn-outline-primary">
+            <span *ngIf="openCalendarId !== program.id">▼ View Calendar</span>
+            <span *ngIf="openCalendarId === program.id">▲ Hide Calendar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CALENDAR BELOW CARD -->
+      <div *ngIf="openCalendarId === program.id" class="calendar-wrapper">
+        <table class="calendar-table">
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Activity</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let day of program.schedule">
+              <td>{{ day.day }}</td>
+              <td>{{ day.activity }}</td>
+              <td>{{ day.time }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </div>
+
+
+
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</section>
+  
+</div>

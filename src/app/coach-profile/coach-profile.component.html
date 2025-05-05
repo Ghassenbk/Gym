@@ -1,0 +1,227 @@
+<!-- Coach Profile Component HTML -->
+<app-header></app-header>
+
+<div class="coach-dashboard">
+  <div class="main-content">
+    <!-- Coach Profile Card -->
+    <div class="coach-profile">
+      <div class="coach-image">
+        <img [src]="coach.imagePath" alt="Coach Profile Image">
+        <div class="coach-experience-badge">
+          <span>{{ coach.experienceYears }} Years</span>
+        </div>
+      </div>
+      <div class="coach-info">
+        <h1><span>Coach</span> Details</h1>
+        <div class="coach-personal-info">
+          <p class="coach-name">{{ coach.name }}</p>
+          <p class="coach-email">{{ coach.email }}</p>
+          <p class="coach-specialty">{{ coach.specialty }}</p>
+        </div>
+        <div class="coach-stats">
+          <div class="stat">
+            <div class="stat-value">{{ programs.length }}</div>
+            <div class="stat-label">Programs</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">4.9</div>
+            <div class="stat-label">Rating</div>
+            <div class="stars">★★★★★</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{ coach.clientsCount }}</div>
+            <div class="stat-label">Clients</div>
+          </div>
+          <button class="edit-profile-btn" (click)="editProfile()">
+            <i class="fas fa-user-edit"></i> Edit Profile
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Programs Section -->
+    <div class="programs-section">
+      <div class="section-header">
+        <h2>Coach <span>Programs</span></h2>
+        <button class="add-program-btn" (click)="addNewProgram()" data-bs-toggle="modal" data-bs-target="#AddProgramModal">
+          + Add New Program
+        </button>
+        
+      </div>
+      <div class="programs-grid">
+        <div *ngFor="let program of programs" class="program-card">
+          <div class="program-image">
+            <img [src]="program.imagePath" alt="Program Image">
+            <div class="program-difficulty">{{ program.difficulty }}</div>
+          </div>
+          <div class="program-details">
+            <div class="program-header">
+              <h3>{{ program.title }}</h3>
+              <div class="program-duration">{{ program.duration }}</div>
+            </div>
+            <div class="program-price">${{ program.price }}</div>
+            <div class="program-description">
+              {{ program.description }}
+            </div>
+            <button class="view-plans-btn" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#plansModal"
+                    (click)="selectProgram(program)">
+              View Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="plansModal" tabindex="-1" aria-labelledby="plansModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="plansModalLabel">{{ isEditing ? 'Edit Program' : (selectedProgram?.title || 'Program Details') }}</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Program Details View -->
+        <div *ngIf="!isEditing" class="modal-content-view" @slideAnimation>
+          <p class="program-subtitle">{{ selectedProgram?.subtitle || 'Complete workout plan with nutrition guidance' }}</p>
+          <div class="plans-container">
+            <div *ngIf="selectedProgram">
+              <div *ngFor="let plan of selectedProgram.plans" class="plan-item">
+                <div class="plan-day" style="margin-right: 50px;">{{ plan.day }}</div>
+                <div class="plan-activity">{{ plan.activity }}</div>
+                <div class="plan-time">{{ plan.time }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Program Form -->
+        <div *ngIf="isEditing" class="modal-content-view" @slideAnimation>
+          <form [formGroup]="programForm" (ngSubmit)="saveProgram()">
+            <div class="form-group">
+              <label for="title">Program Title</label>
+              <input type="text" id="title" formControlName="title" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="subtitle">Subtitle</label>
+              <input type="text" id="subtitle" formControlName="subtitle" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea id="description" formControlName="description" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="price">Price ($)</label>
+              <input type="number" id="price" formControlName="price" class="form-control" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="duration">Duration</label>
+              <input type="text" id="duration" formControlName="duration" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="difficulty">Difficulty</label>
+              <select id="difficulty" formControlName="difficulty" class="form-control">
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+            <!-- Plans Editing -->
+            <div class="form-group">
+              <label>Plans</label>
+              <div formArrayName="plans">
+                <div *ngFor="let plan of plansFormArray.controls; let i = index" [formGroupName]="i" class="plan-edit-item">
+                  <input type="text" formControlName="day" placeholder="Day" class="form-control inline-input">
+                  <input type="text" formControlName="activity" placeholder="Activity" class="form-control inline-input">
+                  <input type="text" formControlName="time" placeholder="Time" class="form-control inline-input">
+                  <button type="button" class="remove-plan-btn" (click)="removePlan(i)" *ngIf="plansFormArray.length > 1">Remove</button>
+                </div>
+                <button type="button" class="add-plan-btn" (click)="addPlan()">+ Add Plan</button>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="save-program-btn" [disabled]="programForm.invalid">Save Changes</button>
+              <button type="button" class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer" *ngIf="!isEditing">
+        <div class="program-enrollment">
+          <p>{{ selectedProgram?.enrolledClients }} clients enrolled</p>
+        </div>
+        <div class="action-buttons">
+          <button class="edit-program-btn" (click)="startEdit()">Edit Program</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="AddProgramModal" tabindex="-1" aria-labelledby="AddProgramModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="AddProgramModalLabel">Add Program</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-content-view">
+          <form [formGroup]="programForm" (ngSubmit)="addNewProgram()">
+            <div class="form-group">
+              <label for="title">Program Title</label>
+              <input type="text" id="title" formControlName="title" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="subtitle">Subtitle</label>
+              <input type="text" id="subtitle" formControlName="subtitle" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea id="description" formControlName="description" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="price">Price ($)</label>
+              <input type="number" id="price" formControlName="price" class="form-control" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="duration">Duration</label>
+              <input type="text" id="duration" formControlName="duration" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="difficulty">Difficulty</label>
+              <select id="difficulty" formControlName="difficulty" class="form-control" style="background: linear-gradient(135deg, #1a1a1a, #2c2c2c, #222222);">
+                <option value="Beginner" style="background-color: #1a1a1a;">Beginner</option>
+                <option value="Intermediate" style="background-color: #1a1a1a;">Intermediate</option>
+                <option value="Advanced" style="background-color: #1a1a1a;">Advanced</option>
+              </select>
+            </div>
+
+            <!-- Plans Section -->
+            <div class="form-group">
+              <label>Plans</label>
+              <div formArrayName="plans">
+                <div *ngFor="let plan of plansFormArray.controls; let i = index" [formGroupName]="i" class="plan-edit-item">
+                  <input type="text" formControlName="day" placeholder="Day" class="form-control inline-input">
+                  <input type="text" formControlName="activity" placeholder="Activity" class="form-control inline-input">
+                  <input type="text" formControlName="time" placeholder="Time" class="form-control inline-input">
+                  <button type="button" class="remove-plan-btn" (click)="removePlan(i)" *ngIf="plansFormArray.length > 1">Remove</button>
+                </div>
+                <button type="button" class="add-plan-btn" (click)="addPlan()">+ Add Plan</button>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="save-program-btn" [disabled]="programForm.invalid">Add Program</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

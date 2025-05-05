@@ -1,0 +1,31 @@
+
+<section class="programs-section">
+    <h2><span class="highlight">CHOOSE</span> PROGRAM</h2>
+    <p class="subtitle">Choose the training program that suits you best.</p>
+  
+    <div class="programs-grid">
+      <div class="program-card" *ngFor="let program of programs">
+        <div class="icon-container">
+            <img [src]="program.icon" alt="icon" />
+          </div>          
+        <div class="program-text">
+          <h3>{{ program.title }}</h3>
+          <p>{{ program.description }}</p>
+          <a [routerLink]="['/program-details']">DISCOVER MORE</a>
+
+
+        </div>
+      </div>
+    </div>
+    <br><br><br><br>
+    
+    <br><br>
+  </section>
+  <app-motivation-banner></app-motivation-banner>
+  <section style="background-color: white;">
+    <div><br><br><br></div>
+    <app-trainers></app-trainers>
+    <br><br><br><br><br>
+  </section>
+ 
+  
