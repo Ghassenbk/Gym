@@ -1,0 +1,66 @@
+<app-dash-header>
+  <div class="subscription-management-container">
+    <div class="subscription-content">
+      <h2>Subscription History</h2>
+
+      <!-- Filter Section -->
+      <div class="filter-container">
+        <input type="text" placeholder="Search by client name..." [(ngModel)]="searchTerm" (input)="filterSubscriptions()">
+        <select [(ngModel)]="filterMonth" (change)="filterSubscriptions()">
+          <option value="">All Months</option>
+          <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+        </select>
+      </div>
+
+      <!-- Subscription Table -->
+      <div class="table-container">
+        <table *ngIf="!isLoading && filteredSubscriptions.length > 0">
+          <thead>
+            <tr>
+              <th>Client Name</th>
+              <th>Subscription Date</th>
+              <th>Expiration Date</th>
+              <th>Amount Paid</th>
+              <th>Payment Method</th>
+              <th>Programs</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subscription of filteredSubscriptions">
+              <td>{{ subscription.client.name || 'N/A' }}</td>
+              <td>{{ subscription.subscriptionDate | date: 'mediumDate' }}</td>
+              <td>{{ subscription.expirationDate | date: 'mediumDate' }}</td>
+              <td>${{ subscription.amountPaid.toFixed(2) }}</td>
+              <td>{{ subscription.paymentMethod }}</td>
+              <td>
+                <span *ngFor="let program of subscription.programs; let isLast = last">
+                  {{ program.title }}{{ !isLast ? ', ' : '' }}
+                </span>
+              </td>
+              <td>
+                <button class="btn-view" (click)="viewDetails(subscription.id)">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn-delete" (click)="deleteSubscription(subscription.id)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="isLoading" class="loading-spinner">Loading...</div>
+        <div *ngIf="!isLoading && filteredSubscriptions.length === 0" class="no-data">
+          No subscriptions found.
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="chart-container">
+      <h3>Monthly Revenue</h3>
+      <canvas id="revenueChart"></canvas>
+    </div>
+  </div>
+</app-dash-header>

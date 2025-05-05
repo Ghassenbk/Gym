@@ -1,0 +1,84 @@
+<app-dash-header>
+<!-- client-management.component.html -->
+<div class="admin-client-container">
+  <h2>Client Management</h2>
+  
+  <div class="client-cards-container">
+    <div *ngIf="isLoading" class="loading-spinner">
+      Loading...
+    </div>
+    
+    <div *ngIf="!isLoading && clients.length === 0" class="no-data">
+      No clients found.
+    </div>
+    
+    <div *ngFor="let client of clients" class="client-card-wrapper">
+      <!-- Client Card -->
+      <div class="client-card" (click)="toggleSubscriptions(client.id)">
+        <div class="client-card-header">
+          <div class="client-avatar">
+            <img [src]="client.imagePath" [alt]="client.name">
+          </div>
+          <div class="client-info">
+            <h3 class="client-name">{{ client.name }}</h3>
+            <p class="client-email">{{ client.email }}</p>
+          </div>
+          <div class="client-actions">
+            <button class="btn-delete" (click)="deleteClient(client.id, $event)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="client-card-footer">
+          <div class="subscription-count">
+            <span class="subscription-badge">{{ client.subscriptions.length }}</span>
+            {{ client.subscriptions.length === 1 ? 'Subscription' : 'Subscriptions' }}
+          </div>
+          <div class="dropdown-indicator">
+            <i class="fas" [ngClass]="expandedClient === client.id ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Subscription Cards (Dropdown) -->
+      <div class="subscription-cards-container" *ngIf="expandedClient === client.id">
+        <div *ngIf="client.subscriptions.length === 0" class="no-subscriptions">
+          No active subscriptions found for this client.
+        </div>
+        
+        <div class="subscription-cards">
+          <div *ngFor="let sub of client.subscriptions" class="subscription-card" [ngClass]="getSubscriptionStatus(sub)">
+            <div class="subscription-card-header">
+              <h4>{{ sub.type }}</h4>
+              <span class="status-badge" [ngClass]="getSubscriptionStatus(sub)">
+                {{ getSubscriptionStatus(sub) === 'active' ? 'Active' : 
+                   getSubscriptionStatus(sub) === 'expiring-soon' ? 'Expiring Soon' : 'Expired' }}
+              </span>
+            </div>
+            <div class="subscription-card-body">
+              <div class="subscription-dates">
+                <div class="date-item">
+                  <span class="date-label">Start Date:</span>
+                  <span class="date-value">{{ sub.startDate | date:'mediumDate' }}</span>
+                </div>
+                <div class="date-item">
+                  <span class="date-label">End Date:</span>
+                  <span class="date-value">{{ sub.endDate | date:'mediumDate' }}</span>
+                </div>
+              </div>
+              
+              <!-- Cancel button container that appears on hover -->
+              <div class="cancel-button-container">
+                <button class="btn-cancel-subscription" >
+                  <i class="fas fa-times"></i> Cancel subscription
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</app-dash-header>

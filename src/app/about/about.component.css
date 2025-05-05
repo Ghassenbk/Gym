@@ -1,0 +1,11 @@
+.programs-section {
+    position: relative;
+    color: white;
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+    height: 100vh;
+    background-color: #EDE1C8;
+  }
+  
+  

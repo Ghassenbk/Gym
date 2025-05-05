@@ -1,0 +1,233 @@
+<app-dash-header>
+  <div class="admin-coach-container">
+    <!-- Add New Coach Button -->
+    <div class="add-coach-header">
+      <button class="btn-add-coach" (click)="openAddCoachModal()">
+        <i class="fas fa-plus"></i> Add New Coach
+      </button>
+    </div>
+  
+    <!-- Loading Spinner -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      Loading...
+    </div>
+    
+    <!-- No Coaches Message -->
+    <div *ngIf="!isLoading && coaches.length === 0" class="no-data">
+      No coaches found.
+    </div>
+    
+    <!-- Coach Cards -->
+    <div *ngFor="let coach of coaches" class="coach-card-wrapper">
+      <!-- Coach Card -->
+      <div class="coach-card" (click)="togglePrograms(coach.id)">
+        <div class="coach-card-header">
+          <div class="coach-avatar">
+            <img [src]="getImageUrl(coach.imagePath)" [alt]="coach.name">
+          </div>
+          <div class="coach-info">
+            <h3 class="coach-name">{{ coach.name }}</h3>
+            <p class="coach-email">{{ coach.email }}</p>
+            <div class="coach-specialties">
+              <span class="specialty-tag">
+                {{ coach.specialties }}
+              </span>
+            </div>
+          </div>
+          <div class="coach-rating">
+            <div class="rating-stars">
+              <i *ngFor="let star of [1,2,3,4,5]" class="fas fa-star" 
+                 [ngClass]="{'filled': star <= coach.rating, 'empty': star > coach.rating}"></i>
+            </div>
+            <span class="rating-value">{{ coach.rating }}/5 ({{ coach.reviews.length }} reviews)</span>
+            <br>
+            <span>
+              <button class="btn btn-outline-danger btn-sm me-2" (click)="openDeleteConfirmModal(coach.id, coach.name, $event)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                </svg>
+              </button> | 
+              <button class="btn btn-outline-primary btn-sm" (click)="openEditCoachModal(coach, $event)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                </svg>
+              </button>
+            </span>
+          </div>
+        </div>
+        
+        <div class="coach-card-footer">
+          <div class="program-count">
+            <span class="program-badge">{{ coach.programs.length }}</span>
+            {{ coach.programs.length === 1 ? 'Program' : 'Programs' }}
+          </div>
+          <div class="dropdown-indicator">
+            <i class="fas" [ngClass]="expandedCoach === coach.id ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Program Cards (Dropdown) -->
+      <div class="program-cards-container" *ngIf="expandedCoach === coach.id">
+        <div *ngIf="coach.programs.length === 0" class="no-programs">
+          No programs created by this coach.
+        </div>
+        
+        <div class="program-cards">
+          <div *ngFor="let program of coach.programs" class="program-card">
+            <div class="program-card-header">
+              <div class="program-image">
+                <img [src]="getImageUrl(program.imagePath)" [alt]="program.title">
+              </div>
+              <div class="program-info">
+                <h4>{{ program.title }}</h4>
+                <p class="program-description">{{ program.description }}</p>
+                <p class="program-price">${{ program.price }}</p>
+              </div>
+            </div>
+            <div class="program-card-body">
+              <div class="enrollment-info">
+                <span class="enrollment-count">{{ program.enrolledClients }} 
+                  {{ program.enrolledClients === 1 ? 'Client' : 'Clients' }} Enrolled
+                </span>
+              </div>
+              <div class="program-plans-title">Plans:</div>
+              <div class="program-plans">
+                <div *ngFor="let plan of program.plans" class="plan-item">
+                  <span class="plan-day">{{ plan.day }}:</span>
+                  <span class="plan-activity">{{ plan.activity }}</span>
+                  <span class="plan-time">{{ plan.time }}</span>
+                </div>
+              </div>
+              
+              <!-- View Details button container -->
+              <div class="view-details-container">
+                <button class="btn-view-details" (click)="viewProgramDetails(coach.id, program.id, $event)">
+                  <i class="fas fa-eye"></i> View Complete Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Add Coach Modal -->
+    <div class="modal-overlay" *ngIf="showAddCoachModal" (click)="closeAddCoachModal($event)">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Add New Coach</h3>
+          <button class="modal-close" (click)="closeAddCoachModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #addCoachForm="ngForm" (ngSubmit)="submitNewCoach()">
+            <div class="form-group">
+              <label for="coachName">Name</label>
+              <input type="text" id="coachName" name="name" [(ngModel)]="newCoach.name" 
+                     class="form-control" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="coachEmail">Email</label>
+              <input type="email" id="coachEmail" name="email" [(ngModel)]="newCoach.email" 
+                     class="form-control" required email autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="coachPassword">Password</label>
+              <input type="password" id="coachPassword" name="password" [(ngModel)]="newCoach.password" 
+                     class="form-control" required autocomplete="new-password">
+            </div>
+            <div class="form-group">
+              <label for="coachSpecialties">Specialties</label>
+              <input type="text" id="coachSpecialties" name="specialties" 
+                     [(ngModel)]="newCoach.specialties" class="form-control" 
+                     placeholder="e.g., Fitness, Nutrition, Yoga" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="coachImage">Profile Image</label>
+              <input type="file" id="coachImage" name="imageFile" accept="image/*" 
+                     (change)="onImageSelected($event, 'add')" class="form-control-file">
+              <div *ngIf="imagePreview" class="image-preview">
+                <img [src]="imagePreview" alt="Image Preview" class="preview-img">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-cancel" (click)="closeAddCoachModal()">Cancel</button>
+              <button type="submit" class="btn-submit" [disabled]="!addCoachForm.valid">Add Coach</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Edit Coach Modal -->
+    <div class="modal-overlay" *ngIf="showEditCoachModal" (click)="closeEditCoachModal($event)">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Edit Coach</h3>
+          <button class="modal-close" (click)="closeEditCoachModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #editCoachForm="ngForm" (ngSubmit)="submitEditCoach()">
+            <div class="form-group">
+              <label for="editCoachName">Name</label>
+              <input type="text" id="editCoachName" name="name" [(ngModel)]="editCoach.name" 
+                     class="form-control" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="editCoachEmail">Email</label>
+              <input type="email" id="editCoachEmail" name="email" [(ngModel)]="editCoach.email" 
+                     class="form-control" required email autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="editCoachPassword">Password</label>
+              <input type="password" id="editCoachPassword" name="password" [(ngModel)]="editCoach.password" 
+                     class="form-control" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+              <label for="editCoachSpecialties">Specialties</label>
+              <input type="text" id="editCoachSpecialties" name="specialties" 
+                     [(ngModel)]="editCoach.specialties" class="form-control" 
+                     placeholder="e.g., Fitness, Nutrition, Yoga" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="editCoachImage">Profile Image</label>
+              <input type="file" id="editCoachImage" name="imageFile" accept="image/*" 
+                     (change)="onImageSelected($event, 'edit')" class="form-control-file">
+              <div *ngIf="editImagePreview || editCoach.imagePath" class="image-preview">
+                <img [src]="getEditImageSrc()" alt="Image Preview" class="preview-img">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-cancel" (click)="closeEditCoachModal()">Cancel</button>
+              <button type="submit" class="btn-submit" [disabled]="!editCoachForm.valid">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" *ngIf="showDeleteConfirmModal" (click)="closeDeleteConfirmModal($event)">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Confirm Deletion</h3>
+          <button class="modal-close" (click)="closeDeleteConfirmModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete {{ deleteCoachName }}?</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" (click)="closeDeleteConfirmModal()">Cancel</button>
+          <button class="btn-delete" (click)="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-dash-header>

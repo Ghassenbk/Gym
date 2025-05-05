@@ -1,0 +1,284 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+/* clients.component.css */
+.admin-client-container {
+  padding: 20px;
+  max-width: 1500px;
+    margin: 0 0px;
+}
+
+.admin-client-container h2 {
+  color: #333;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #3f51b5;
+  padding-bottom: 10px;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+  font-size: 16px;
+}
+
+.no-data {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+  font-style: italic;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.client-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.client-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.client-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.client-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.client-card-header {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.client-avatar {
+  width: 60px;
+  height: 60px;
+  margin-right: 15px;
+}
+
+.client-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #f0f0f0;
+}
+
+.client-info {
+  flex-grow: 1;
+}
+
+.client-name {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.client-email {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.client-actions .btn-delete {
+  background-color: transparent;
+  border: none;
+  color: #f44336;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.client-actions .btn-delete:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+.client-card-footer {
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+}
+
+.subscription-count {
+  display: flex;
+  align-items: center;
+}
+
+.subscription-badge {
+  background-color: #3f51b5;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  margin-right: 8px;
+}
+
+.dropdown-indicator {
+  color: #666;
+  transition: transform 0.3s ease;
+}
+
+.subscription-cards-container {
+  margin-top: -10px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 0 0 8px 8px;
+  box-shadow: inset 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.no-subscriptions {
+  padding: 15px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.subscription-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.subscription-card {
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.subscription-card.active {
+  border-top: 3px solid #4caf50;
+}
+
+.subscription-card.expired {
+  border-top: 3px solid #f44336;
+  opacity: 0.8;
+}
+
+.subscription-card.expiring-soon {
+  border-top: 3px solid #ff9800;
+}
+
+.subscription-card-header {
+  padding: 15px;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subscription-card-header h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-badge.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.status-badge.expired {
+  background-color: #f44336;
+  color: white;
+}
+
+.status-badge.expiring-soon {
+  background-color: #ff9800;
+  color: white;
+}
+
+.subscription-card-body {
+  padding: 15px;
+}
+
+.subscription-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #555;
+}
+
+.date-label {
+  font-weight: bold;
+}
+
+.date-value {
+  font-style: italic;
+}
+
+/* Dynamic Cancel Button Styling */
+.cancel-button-container {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3s ease;
+  margin-top: 0;
+}
+
+.subscription-card:hover .cancel-button-container {
+  height: 40px;
+  margin-top: 15px;
+}
+
+.btn-cancel-subscription {
+  width: 100%;
+  padding: 8px 0;
+  background-color: transparent;
+  border: 1px solid #000;
+  border-radius: 4px;
+  color: #000;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.btn-cancel-subscription:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.btn-cancel-subscription i {
+  font-size: 12px;
+}

@@ -1,0 +1,79 @@
+<app-dash-header>
+<!-- admin-messages.component.html -->
+<div class="admin-messages-container">
+    <h2>User Messages</h2>
+    
+    <div class="messages-header">
+      <div class="messages-counter">
+        <span>{{ messages.length }} {{ messages.length === 1 ? 'Message' : 'Messages' }}</span>
+        <span *ngIf="getUnseenCount() > 0" class="unseen-badge">{{ getUnseenCount() }} Unseen</span>
+      </div>
+      <div class="bulk-actions">
+        <button class="btn-mark-all" (click)="markAllAsSeen()" [disabled]="!hasUnseenMessages()">
+          <i class="fas fa-check-double"></i> Mark All as Seen
+        </button>
+        <button class="btn-delete-all" (click)="confirmDeleteAll()">
+          <i class="fas fa-trash"></i> Delete All
+        </button>
+      </div>
+    </div>
+    
+    <div class="messages-list-container">
+      <div *ngIf="isLoading" class="loading-spinner">
+        Loading...
+      </div>
+      
+      <div *ngIf="!isLoading && messages.length === 0" class="no-messages">
+        No messages found.
+      </div>
+      
+      <div class="messages-list" *ngIf="!isLoading && messages.length > 0">
+        <div *ngFor="let message of messages" class="message-card" [ngClass]="{'unseen': !message.seen}">
+          <div class="message-header">
+            <div class="user-info">
+              <div class="user-avatar">
+                <img [src]="message.userAvatar || 'assets/images/default-avatar.png'" [alt]="message.userName">
+              </div>
+              <div class="user-details">
+                <h3 class="user-name">{{ message.userName }}</h3>
+                <p class="message-date">{{ message.createdAt | date:'medium' }}</p>
+              </div>
+            </div>
+            <div class="message-status" *ngIf="message.seen">
+              <span class="seen-badge">
+                <i class="fas fa-check"></i> Seen
+              </span>
+            </div>
+          </div>
+          
+          <div class="message-content">
+            <p>{{ message.content }}</p>
+          </div>
+          
+          <div class="message-footer">
+            <div class="message-actions">
+              <button class="btn-mark-seen" (click)="markAsSeen(message)" [disabled]="message.seen">
+                <i class="fas fa-check"></i> Mark as Seen
+              </button>
+              <button class="btn-delete" (click)="deleteMessage(message.id)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Confirmation modal -->
+    <div class="modal" *ngIf="showDeleteModal">
+      <div class="modal-content">
+        <h3>Confirm Delete</h3>
+        <p>Are you sure you want to delete {{ deleteAllMode ? 'all messages' : 'this message' }}? This action cannot be undone.</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+          <button class="btn-confirm" (click)="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-dash-header>

@@ -1,0 +1,35 @@
+<!-- Top Header -->
+<div class="dashboard-header bg-dark text-light d-flex align-items-center justify-content-between px-4 py-2">
+    <h3 class="m-0">ADMIN PANEL</h3>
+    <a routerLink="/" class="btn btn-outline-light btn-sm">User Interface</a>
+  </div>
+  
+  <div class="dashboard-layout d-flex">
+    <!-- Sidebar -->
+    <div class="dashboard-sidebar bg-dark border-end border-secondary d-flex flex-column p-3">
+      <h4 class="text-light mb-4">Menu</h4>
+      <ul class="nav nav-pills flex-column w-100">
+        <li class="nav-item mb-2">
+          <a class="nav-link text-light" routerLink="/admin_settings">Settings</a>
+        </li>
+        <li class="nav-item mb-2">
+          <a class="nav-link text-light" routerLink="/admin-clients">Clients</a>
+        </li>
+        <li class="nav-item mb-2">
+          <a class="nav-link text-light" routerLink="/admin-coaches">Coaches</a>
+        </li>
+        <li class="nav-item mb-2">
+          <a class="nav-link text-light" routerLink="/admin_subscriptions">Subscriptions</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" routerLink="/admin_contactus">User Queries</a>
+        </li>
+      </ul>
+    </div>
+  
+    <!-- Main Content (scrollable) -->
+    <div class="dashboard-content flex-grow-1 p-4">
+      <ng-content></ng-content>
+    </div>
+  </div>
+  
